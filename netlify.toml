@@ -1,0 +1,13 @@
+[build]
+command = "pip install -r requirements.txt"
+functions = "netlify/functions"
+publish = "."
+
+[functions]
+pythonVersion = "3.12"
+
+[[redirects]]
+from = "/api/predict"
+to = "/.netlify/functions/predict"
+status = 200
+force = true

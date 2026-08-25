@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traffic Volume Estimation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url("https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+      background-size: cover;
+      background-attachment: fixed;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .prediction-result {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      display: none;
+    }
+
+    .prediction-result.show {
+      display: block;
+    }
+
+    .prediction-result.success {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+
+    .prediction-result.error {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .prediction-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .traffic-level {
+      font-size: 18px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .loading {
+      text-align: center;
+      display: none;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4CAF50;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .info-box {
+      background-color: #e7f3fe;
+      border-left: 4px solid #2196F3;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #0c5aa0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚗 Traffic Volume Estimation</h1>
+    <p class="subtitle">Predict traffic volume using ML model</p>
+
+    <div class="info-box">
+      ℹ️ Enter weather and time details to get a traffic volume prediction
+    </div>
+
+    <form id="predictionForm">
+      <div class="form-group">
+        <label for="holiday">Holiday Type:</label>
+        <select id="holiday" name="holiday" required>
+          <option value="7">None</option>
+          <option value="1">Columbus Day</option>
+          <option value="10">Veterans Day</option>
+          <option value="9">Thanksgiving Day</option>
+          <option value="0">Christmas Day</option>
+          <option value="6">New Years Day</option>
+          <option value="11">Washington's Birthday</option>
+          <option value="5">Memorial Day</option>
+          <option value="2">Independence Day</option>
+          <option value="8">State Fair</option>
+          <option value="3">Labour Day</option>
+          <option value="4">Martin Luther King Jr Day</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="temp">Temperature (°C):</label>
+        <input type="number" id="temp" name="temp" step="0.1" placeholder="e.g., 25.5" required />
+      </div>
+
+      <div class="form-group">
+        <label for="rain">Rain (mm):</label>
+        <input type="number" id="rain" name="rain" step="0.1" placeholder="e.g., 0" required />
+      </div>
+
+      <div class="form-group">
+        <label for="snow">Snow (cm):</label>
+        <input type="number" id="snow" name="snow" step="0.1" placeholder="e.g., 0" required />
+      </div>
+
+      <div class="form-group">
+        <label for="weather">Weather Condition:</label>
+        <select id="weather" name="weather" required>
+          <option value="0">Clear</option>
+          <option value="1">Clouds</option>
+          <option value="2">Drizzle</option>
+          <option value="3">Fog</option>
+          <option value="4">Haze</option>
+          <option value="5">Mist</option>
+          <option value="6">Rain</option>
+          <option value="7">Smoke</option>
+          <option value="8">Snow</option>
+          <option value="9">Squall</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" min="2012" max="2025" placeholder="e.g., 2024" required />
+      </div>
+
+      <div class="form-group">
+        <label for="month">Month:</label>
+        <input type="number" id="month" name="month" min="1" max="12" placeholder="1-12" required />
+      </div>
+
+      <div class="form-group">
+        <label for="day">Day:</label>
+        <input type="number" id="day" name="day" min="1" max="31" placeholder="1-31" required />
+      </div>
+
+      <div class="form-group">
+        <label for="hours">Hour:</label>
+        <input type="number" id="hours" name="hours" min="0" max="23" placeholder="0-23" required />
+      </div>
+
+      <div class="form-group">
+        <label for="minutes">Minute:</label>
+        <input type="number" id="minutes" name="minutes" min="0" max="59" placeholder="0-59" required />
+      </div>
+
+      <div class="form-group">
+        <label for="seconds">Second:</label>
+        <input type="number" id="seconds" name="seconds" min="0" max="59" placeholder="0-59" required />
+      </div>
+
+      <button type="submit" id="predictBtn">🔮 Predict Traffic Volume</button>
+    </form>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Analyzing traffic data...</p>
+    </div>
+
+    <div class="prediction-result" id="predictionResult">
+      <h3>📊 Prediction Result</h3>
+      <div class="prediction-value" id="predictionValue"></div>
+      <div class="traffic-level" id="trafficLevel"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('predictionForm');
+    const loading = document.getElementById('loading');
+    const resultDiv = document.getElementById('predictionResult');
+    const predictBtn = document.getElementById('predictBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Get form data
+      const formData = new FormData(form);
+      const data = {
+        holiday: parseFloat(formData.get('holiday')),
+        temp: parseFloat(formData.get('temp')),
+        rain: parseFloat(formData.get('rain')),
+        snow: parseFloat(formData.get('snow')),
+        weather: parseFloat(formData.get('weather')),
+        year: parseFloat(formData.get('year')),
+        month: parseFloat(formData.get('month')),
+        day: parseFloat(formData.get('day')),
+        hours: parseFloat(formData.get('hours')),
+        minutes: parseFloat(formData.get('minutes')),
+        seconds: parseFloat(formData.get('seconds'))
+      };
+
+      // Show loading state
+      loading.style.display = 'block';
+      resultDiv.classList.remove('show', 'success', 'error');
+      predictBtn.disabled = true;
+
+      try {
+        // Determine API endpoint
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? '/predict'  // Local Flask endpoint
+          : '/.netlify/functions/predict';  // Netlify serverless endpoint
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          // Display prediction result
+          document.getElementById('predictionValue').textContent = 
+            `${result.prediction.toFixed(2)} vehicles`;
+          document.getElementById('trafficLevel').textContent = 
+            `Traffic Level: ${result.traffic_level}`;
+          
+          resultDiv.classList.add('show', 'success');
+        } else {
+          throw new Error(result.message || 'Prediction failed');
+        }
+      } catch (error) {
+        document.getElementById('predictionValue').textContent = 'Error';
+        document.getElementById('trafficLevel').textContent = 
+          `Error: ${error.message}`;
+        
+        resultDiv.classList.add('show', 'error');
+        console.error('Error:', error);
+      } finally {
+        loading.style.display = 'none';
+        predictBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
