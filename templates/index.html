@@ -2,127 +2,739 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Traffic Volume Estimation</title>
+
   <style>
+
+    /* ================================
+       PAGE
+       ================================ */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
     body {
       background-image: url("https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
       background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
       color: black;
+      margin: 0;
+
+      min-height: 100vh;
+
+      font-family: Arial, sans-serif;
+    }
+
+
+    /* ================================
+       MAIN CONTENT
+       ================================ */
+
+    .page-content {
+      min-height: 100vh;
+
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+
+      padding: 40px 20px;
     }
+
+
+    /* ================================
+       LOGIN / PREDICTION FORM
+       ================================ */
+
     .Login {
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 20px;
-      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.84);
+
+      padding: 30px;
+
+      border-radius: 15px;
+
+      text-align: center;
+
+      width: 100%;
+      max-width: 500px;
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25);
+
+      backdrop-filter: blur(4px);
+    }
+
+    .Login h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+
+      font-size: 34px;
+      color: #111;
+    }
+
+    .Login h2 {
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: #222;
+    }
+
+
+    /* ================================
+       FORM
+       ================================ */
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: inline-block;
+
+      width: 100px;
+
+      text-align: right;
+
+      margin-right: 10px;
+
+      font-weight: 500;
+    }
+
+    input,
+    select {
+      width: 190px;
+
+      height: 32px;
+
+      padding: 5px 8px;
+
+      border: 1px solid #aaa;
+
+      border-radius: 5px;
+
+      font-size: 14px;
+
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+
+      border-color: #f5a623;
+
+      box-shadow: 0 0 4px rgba(245, 166, 35, 0.5);
+    }
+
+
+    /* ================================
+       PREDICT BUTTON
+       ================================ */
+
+    button {
+      height: 38px !important;
+
+      width: 200px !important;
+
+      margin-top: 8px;
+
+      border: none;
+
+      border-radius: 6px;
+
+      background: #222;
+
+      color: white;
+
+      font-size: 16px;
+
+      cursor: pointer;
+
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #f5a623;
+
+      color: #111;
+    }
+
+
+    /* ================================
+       PREDICTION RESULT
+       ================================ */
+
+    .prediction-result {
+      margin-top: 20px;
+
+      padding: 12px;
+
+      border-radius: 8px;
+
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    .prediction-result label {
+      width: auto;
+
+      margin: 0;
+
+      font-weight: bold;
+
       text-align: center;
     }
-    .form-group {
-      margin-bottom: 10px;
+
+    .prediction-result p {
+      margin: 8px 0 0;
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      color: #222;
     }
+
+
+    /* ================================
+       PROJECT FOOTER
+       ================================ */
+
+    .project-footer {
+      width: 100%;
+
+      background: rgba(15, 18, 20, 0.97);
+
+      color: white;
+
+      margin-top: 0;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+
+      margin: 0 auto;
+
+      padding: 35px 40px 25px;
+
+      display: grid;
+
+      grid-template-columns: 1fr 1.5fr 1fr;
+
+      gap: 35px;
+    }
+
+    .footer-section {
+      display: flex;
+
+      gap: 15px;
+
+      padding: 10px 20px;
+    }
+
+    .footer-section:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .footer-icon {
+      font-size: 30px;
+
+      min-width: 35px;
+    }
+
+    .footer-section h3 {
+      margin: 0 0 10px;
+
+      color: #f5a623;
+
+      font-size: 17px;
+    }
+
+    .footer-section p {
+      margin: 5px 0;
+
+      color: #d5d5d5;
+
+      font-size: 14px;
+
+      line-height: 1.6;
+    }
+
+    .footer-section .developer-name {
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: bold;
+    }
+
+    .footer-section a {
+      color: #4da6ff;
+
+      text-decoration: none;
+
+      font-weight: 500;
+    }
+
+    .footer-section a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+      text-align: center;
+
+      padding: 18px 20px;
+
+      color: #bbbbbb;
+
+      font-size: 14px;
+    }
+
+
+    /* ================================
+       MOBILE RESPONSIVE
+       ================================ */
+
+    @media (max-width: 768px) {
+
+      .page-content {
+        padding: 25px 15px;
+      }
+
+      .Login {
+        padding: 20px;
+
+        max-width: 450px;
+      }
+
+      .Login h1 {
+        font-size: 27px;
+      }
+
+      .Login h2 {
+        font-size: 17px;
+      }
+
+      .form-group label {
+        width: 90px;
+      }
+
+      input,
+      select {
+        width: 170px;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+
+        padding: 25px 20px;
+
+        gap: 10px;
+      }
+
+      .footer-section {
+        padding: 20px 5px;
+
+        border-right: none !important;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .footer-section:last-child {
+        border-bottom: none;
+      }
+
+    }
+
   </style>
 </head>
+
+
 <body>
-  <div class="Login">
-    <h1>Traffic Volume Estimation</h1>
-    <form action="{{ url_for('predict')}}" method="post">
-      <h2>Please enter the following details</h2>
 
-      <div class="form-group">
-        <label for="holiday">holiday:</label>
-        <select id="holiday" name="holiday">
-          <option value="7">None</option>
-          <option value="1">Columbus Day</option>
-          <option value="10">Veterans Day</option>
-          <option value="9">Thanksgiving Day</option>
-          <option value="0">Christmas Day</option>
-          <option value="6">New Years Day</option>
-          <option value="11">Washingtons Birthday</option>
-          <option value="5">Memorial Day</option>
-          <option value="2">Independence Day</option>
-          <option value="8">State Fair</option>
-          <option value="3">Labour Day</option>
-          <option value="4">Martin Luther King Jr Day</option><!-- Add more holiday options here -->
-        </select>
+  <!-- ================================
+       MAIN APPLICATION
+       ================================ -->
+
+  <main class="page-content">
+
+    <div class="Login">
+
+      <h1>Traffic Volume Estimation</h1>
+
+      <form action="{{ url_for('predict')}}" method="post">
+
+        <h2>Please enter the following details</h2>
+
+
+        <!-- Holiday -->
+
+        <div class="form-group">
+
+          <label for="holiday">Holiday:</label>
+
+          <select id="holiday" name="holiday">
+
+            <option value="7">None</option>
+            <option value="1">Columbus Day</option>
+            <option value="10">Veterans Day</option>
+            <option value="9">Thanksgiving Day</option>
+            <option value="0">Christmas Day</option>
+            <option value="6">New Years Day</option>
+            <option value="11">Washingtons Birthday</option>
+            <option value="5">Memorial Day</option>
+            <option value="2">Independence Day</option>
+            <option value="8">State Fair</option>
+            <option value="3">Labour Day</option>
+            <option value="4">Martin Luther King Jr Day</option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Temperature -->
+
+        <div class="form-group">
+
+          <label for="temp">Temp:</label>
+
+          <input
+            type="number"
+            step="any"
+            name="temp"
+            placeholder="Temperature"
+            required
+          />
+
+        </div>
+
+
+        <!-- Rain -->
+
+        <div class="form-group">
+
+          <label for="rain">Rain:</label>
+
+          <input
+            type="number"
+            step="any"
+            name="rain"
+            placeholder="Rain"
+            required
+          />
+
+        </div>
+
+
+        <!-- Snow -->
+
+        <div class="form-group">
+
+          <label for="snow">Snow:</label>
+
+          <input
+            type="number"
+            step="any"
+            name="snow"
+            placeholder="Snow"
+            required
+          />
+
+        </div>
+
+
+        <!-- Weather -->
+
+        <div class="form-group">
+
+          <label for="weather">Weather:</label>
+
+          <select id="weather" name="weather">
+
+            <option value="1">Clouds</option>
+            <option value="0">Clear</option>
+            <option value="6">Rain</option>
+            <option value="2">Drizzle</option>
+            <option value="5">Mist</option>
+            <option value="4">Haze</option>
+            <option value="3">Fog</option>
+            <option value="1">Thunderstorm</option>
+            <option value="8">Snow</option>
+            <option value="9">Squad11</option>
+            <option value="7">Smoke</option>
+
+          </select>
+
+        </div>
+
+
+        <!-- Year -->
+
+        <div class="form-group">
+
+          <label for="year">Year:</label>
+
+          <input
+            type="number"
+            min="2012"
+            max="2025"
+            name="year"
+            placeholder="Year"
+            required
+          />
+
+        </div>
+
+
+        <!-- Month -->
+
+        <div class="form-group">
+
+          <label for="month">Month:</label>
+
+          <input
+            type="number"
+            min="1"
+            max="12"
+            name="month"
+            placeholder="Month"
+            required
+          />
+
+        </div>
+
+
+        <!-- Day -->
+
+        <div class="form-group">
+
+          <label for="day">Day:</label>
+
+          <input
+            type="number"
+            min="1"
+            max="31"
+            name="day"
+            placeholder="Day"
+            required
+          />
+
+        </div>
+
+
+        <!-- Hours -->
+
+        <div class="form-group">
+
+          <label for="hours">Hours:</label>
+
+          <input
+            type="number"
+            min="0"
+            max="23"
+            name="hours"
+            placeholder="Hours"
+            required
+          />
+
+        </div>
+
+
+        <!-- Minutes -->
+
+        <div class="form-group">
+
+          <label for="minutes">Minutes:</label>
+
+          <input
+            type="number"
+            min="0"
+            max="59"
+            name="minutes"
+            placeholder="Minutes"
+            required
+          />
+
+        </div>
+
+
+        <!-- Seconds -->
+
+        <div class="form-group">
+
+          <label for="seconds">Seconds:</label>
+
+          <input
+            type="number"
+            min="0"
+            max="59"
+            name="seconds"
+            placeholder="Seconds"
+            required
+          />
+
+        </div>
+
+
+        <!-- Predict Button -->
+
+        <div class="form-group">
+
+          <button type="submit">
+            Predict
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <!-- Prediction Result -->
+
+      <div class="prediction-result">
+
+        <label for="prediction">
+          Predicted Traffic Volume:
+        </label>
+
+        <p>
+          {{ prediction_text }}
+        </p>
+
       </div>
 
-      <div class="form-group">
-        <label for="temp">temp:</label>
-        <input type="number" name="temp" placeholder="temp" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="rain">rain:</label>
-        <input type="number" name="rain" placeholder="rain" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="snow">snow:</label>
-        <input type="number" name="snow" placeholder="snow" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="weather">weather:</label>
-        <select id="weather" name="weather">
-          <option value="1">Clouds</option>
-          <option value="0">Clear</option>
-          <option value="6">Rain</option>
-          <option value="2">Drizzle</option>
-          <option value="5">Mist</option>
-          <option value="4">Haze</option>
-          <option value="3">Fog</option>
-          <option value="1">Thunderstorm</option>
-          <option value="8">Snow</option>
-          <option value="9">Squad11</option>
-          <option value="7">Smoke</option><!-- Add more weather options here -->
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="year">year:</label>
-        <input type="number" min="2012" max="2025" name="year" placeholder="year" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="month">month:</label>
-        <input type="number" min="1" max="12" name="month" placeholder="month" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="day">day:</label>
-        <input type="number" min="1" max="31" name="day" placeholder="day" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="hours">hours:</label>
-        <input type="number" min="1" max="24" name="hours" placeholder="hours" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="minutes">minutes:</label>
-        <input type="number" min="0" max="60" name="minutes" placeholder="minutes" required="required" />
-      </div>
-
-      <div class="form-group">
-        <label for="seconds">seconds:</label>
-        <input type="number" min="0" max="60" name="seconds" placeholder="seconds" required="required" />
-      </div>
-
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-block btn-large" style="height:30px; width:200px">
-          Predict
-        </button>
-      </div>
-    </form>
-
-    <!-- Section to display predicted traffic volume -->
-    <div class="form-group">
-      <label for="prediction">Predicted Traffic Volume:</label>
-      <p>{{ prediction_text }}</p>
     </div>
-  </div>
+
+  </main>
+
+
+  <!-- ================================
+       PROJECT FOOTER
+       ================================ -->
+
+  <footer class="project-footer">
+
+    <div class="footer-container">
+
+
+      <!-- Developer -->
+
+      <div class="footer-section">
+
+        <div class="footer-icon">
+          👨‍💻
+        </div>
+
+        <div>
+
+          <h3>Project By</h3>
+
+          <p class="developer-name">
+             Dileep Kumar
+          </p>
+
+          <p>
+            <a
+              href="https://github.com/Dileep3015"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub: Dileep3015
+            </a>
+          </p>
+           <p>
+            <a
+              href="https://www.linkedin.com/in/dileepkumar28072002"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Linkedin: Dileep Kumar Donakonda
+            </a>
+          </p>
+
+          <p>
+              Machine Learning & Data Science Project
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- About -->
+
+      <div class="footer-section">
+
+        <div class="footer-icon">
+          🚦
+        </div>
+
+        <div>
+
+          <h3>About This Project</h3>
+
+          <p>
+            This project predicts traffic volume using
+            machine learning based on weather conditions
+            and time-related information.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- Live Application -->
+
+      <div class="footer-section">
+
+        <div class="footer-icon">
+          🌐
+        </div>
+
+        <div>
+
+          <h3>Live Application</h3>
+
+          <p>
+
+            <a
+              href="https://traffic-volume-predictor.onrender.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              traffic-volume-predictor.onrender.com
+            </a>
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- Copyright -->
+
+    <div class="footer-bottom">
+
+      © 2026 Dileep Kumar. All rights reserved.
+
+    </div>
+
+  </footer>
+
+
 </body>
 </html>
