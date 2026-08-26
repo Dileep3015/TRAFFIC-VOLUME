@@ -1,56 +1,69 @@
 # 🚦 Traffic Volume Prediction
 
-A Machine Learning web application that predicts traffic volume based on weather and time-related inputs.
+A machine learning web application that predicts traffic volume using weather conditions and time-based information.
+
+The project uses a Random Forest regression model trained on historical traffic data and provides predictions through a simple Flask web interface.
 
 ## 🌐 Live Demo
 
-👉 **[Try the Traffic Volume Predictor](https://traffic-volume-predictor.onrender.com)**
+**Try the application:**  
+https://traffic-volume-predictor.onrender.com
 
-## 📊 Model Performance
+---
 
-- **Model:** Random Forest Regressor
-- **MAE:** 528.59
-- **RMSE:** 818.83
-- **R² Score:** 0.8286
+## 📌 About the Project
 
-## 🛠️ Technologies Used
+Traffic volume can vary significantly depending on factors such as weather, time of day, and date.
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Flask
-- Joblib
-- HTML/CSS
-- Render
+This project explores how machine learning can be used to estimate traffic volume from these factors. The trained model is integrated into a Flask application, allowing users to enter relevant conditions and receive an estimated traffic volume.
+
+The application also provides a simple traffic classification:
+
+- **Low Traffic**
+- **Medium Traffic**
+- **High Traffic**
+
+The goal of the project was not only to train a machine learning model, but also to take the model through the complete process of data preprocessing, model training, evaluation, serialization, and deployment.
+
+---
 
 ## ✨ Features
 
-- Traffic volume prediction
-- Weather-based prediction
-- Time-based prediction
-- Low / Medium / High traffic classification
-- Deployed Flask web application
+- Predict traffic volume from weather and time-related inputs
+- Random Forest regression model
+- Weather condition handling
+- Date and time feature extraction
+- Missing-value preprocessing
+- Model evaluation using MAE, RMSE, and R²
+- Flask-based web interface
+- Trained model stored as a GitHub Release asset
+- Deployed and accessible through Render
 
-## 🚀 Deployment
+---
 
-The application is deployed using Render.
+## 🧠 Machine Learning Approach
 
-The trained `model.pkl` is distributed through the GitHub Release:
-
-**Traffic Volume Model v1.0**
-
-The model is downloaded automatically by the Flask application when required.
-
-## 📁 Project Structure
+The project follows a typical machine learning workflow:
 
 ```text
-TRAFFIC-VOLUME/
-├── app.py
-├── encoder.pkl
-├── requirements.txt
-├── README.md
-├── TRAFFICTELLIGENCE.ipynb
-├── templates/
-│   └── index.html
-└── .gitignore
+Raw Traffic Data
+       ↓
+Data Cleaning
+       ↓
+Missing Value Handling
+       ↓
+Feature Engineering
+       ↓
+Feature / Target Separation
+       ↓
+Train-Test Split
+       ↓
+Model Training
+       ↓
+Model Evaluation
+       ↓
+Model Serialization
+       ↓
+Flask Integration
+       ↓
+Render Deployment
