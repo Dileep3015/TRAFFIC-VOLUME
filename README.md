@@ -1,69 +1,128 @@
-# 🚦 Traffic Volume Prediction
+# 🚦 Interactive Traffic Volume Prediction & Visualization
 
-A machine learning web application that predicts traffic volume using weather conditions and time-based information.
+An interactive machine learning web application that estimates traffic volume based on weather conditions, holidays, date, and time-related inputs, with an interactive map for location-based visualization.
 
-The project uses a Random Forest regression model trained on historical traffic data and provides predictions through a simple Flask web interface.
+The project combines **Machine Learning, Flask, Leaflet/OpenStreetMap, GitHub Releases, and Render deployment** into a complete end-to-end application.
 
-## 🌐 Live Demo
-
-**Try the application:**  
+🌐 **Live Application:**  
 https://traffic-volume-predictor.onrender.com
 
 ---
 
 ## 📌 About the Project
 
-Traffic volume can vary significantly depending on factors such as weather, time of day, and date.
+Traffic conditions can change significantly depending on weather, holidays, date, and time.
 
-This project explores how machine learning can be used to estimate traffic volume from these factors. The trained model is integrated into a Flask application, allowing users to enter relevant conditions and receive an estimated traffic volume.
+This project was developed to explore how machine learning can be used to estimate traffic volume from these factors and present the result through a simple web interface.
 
-The application also provides a simple traffic classification:
+The application allows users to:
 
-- **Low Traffic**
-- **Medium Traffic**
-- **High Traffic**
+- Enter weather and time-related information
+- Select holiday and weather conditions
+- Enter date and time information
+- Predict estimated traffic volume using a trained Random Forest model
+- Classify the prediction as Low, Medium, or High Traffic
+- Select a location directly from an interactive map
+- Use the browser's current location
+- Quickly navigate to Bengaluru
+- View the selected latitude and longitude
+- Visualize the prediction together with the selected location
 
-The goal of the project was not only to train a machine learning model, but also to take the model through the complete process of data preprocessing, model training, evaluation, serialization, and deployment.
-
----
-
-## ✨ Features
-
-- Predict traffic volume from weather and time-related inputs
-- Random Forest regression model
-- Weather condition handling
-- Date and time feature extraction
-- Missing-value preprocessing
-- Model evaluation using MAE, RMSE, and R²
-- Flask-based web interface
-- Trained model stored as a GitHub Release asset
-- Deployed and accessible through Render
+The goal was not only to build a machine learning model, but to turn it into a usable web application and deploy it online.
 
 ---
 
-## 🧠 Machine Learning Approach
+## ✨ Key Features
 
-The project follows a typical machine learning workflow:
+### 🤖 Machine Learning Prediction
+
+The application uses a trained **Random Forest Regression** model to estimate traffic volume.
+
+The model uses the following input features:
+
+- Holiday
+- Temperature
+- Rain
+- Snow
+- Weather condition
+- Year
+- Month
+- Day
+- Hour
+- Minute
+- Second
+
+The predicted value is then categorized into:
+
+| Traffic Volume | Classification |
+|---|---|
+| `< 500` | 🟢 Low Traffic |
+| `500 - 1999` | 🟡 Medium Traffic |
+| `>= 2000` | 🔴 High Traffic |
+
+---
+
+### 🗺️ Interactive Traffic Map
+
+The project was extended with an interactive map using **Leaflet** and **OpenStreetMap**.
+
+Users can click on the map to select a traffic location.
+
+The application displays:
+
+- 📍 Latitude
+- 📍 Longitude
+- 🚦 Traffic prediction
+- Traffic classification
+
+The selected location is displayed visually using a map marker and popup.
+
+---
+
+### 📍 Location Features
+
+The map provides additional location functionality:
+
+#### Use My Location
+
+The application can request the user's browser location and display it on the map.
+
+#### Bengaluru
+
+A dedicated button allows users to quickly move the map to Bengaluru.
+
+#### Manual Location Selection
+
+Users can click anywhere on the map to select a location.
+
+This makes the application more interactive than a traditional machine learning prediction form.
+
+---
+
+## 🏗️ System Architecture
+
+The project follows a simple end-to-end architecture:
 
 ```text
-Raw Traffic Data
-       ↓
-Data Cleaning
-       ↓
-Missing Value Handling
-       ↓
-Feature Engineering
-       ↓
-Feature / Target Separation
-       ↓
-Train-Test Split
-       ↓
-Model Training
-       ↓
-Model Evaluation
-       ↓
-Model Serialization
-       ↓
-Flask Integration
-       ↓
-Render Deployment
+                User
+                  │
+                  ▼
+        ┌───────────────────┐
+        │   Flask Web App   │
+        └─────────┬─────────┘
+                  │
+        ┌─────────┴──────────┐
+        │                    │
+        ▼                    ▼
+ Prediction Form       Interactive Map
+        │                    │
+        ▼                    ▼
+ Random Forest        Leaflet + OpenStreetMap
+        │                    │
+        └─────────┬──────────┘
+                  │
+                  ▼
+          Traffic Prediction
+                  │
+                  ▼
+       Low / Medium / High
