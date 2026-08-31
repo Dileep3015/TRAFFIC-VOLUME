@@ -1,16 +1,41 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
 
-  <title>Traffic Volume Estimation</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Traffic Volume Prediction</title>
+
+
+  <!-- ================================
+       LEAFLET MAP
+       ================================ -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+
+  <!-- ================================
+       CSS
+       ================================ -->
 
   <style>
 
-    /* ================================
-       PAGE
-       ================================ */
+    /* =================================
+       GLOBAL
+       ================================= */
 
     * {
       box-sizing: border-box;
@@ -21,41 +46,75 @@
     }
 
     body {
-      background-image: url("https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
 
-      color: black;
       margin: 0;
 
       min-height: 100vh;
 
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
+
+      color: #111;
+
+      background-image:
+        url("https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+
+      background-size: cover;
+
+      background-position: center;
+
+      background-attachment: fixed;
+
+      background-repeat: no-repeat;
     }
 
 
-    /* ================================
-       MAIN CONTENT
-       ================================ */
+    /* =================================
+       MAIN PAGE
+       ================================= */
 
     .page-content {
+
       min-height: 100vh;
 
       display: flex;
+
       justify-content: center;
+
       align-items: center;
 
       padding: 40px 20px;
     }
 
 
-    /* ================================
-       LOGIN / PREDICTION FORM
-       ================================ */
+    /* =================================
+       MAIN APPLICATION LAYOUT
+       ================================= */
+
+    .app-layout {
+
+      width: 100%;
+
+      max-width: 1250px;
+
+      margin: 0 auto;
+
+      display: grid;
+
+      grid-template-columns: 500px 1fr;
+
+      gap: 25px;
+
+      align-items: start;
+    }
+
+
+    /* =================================
+       FORM CARD
+       ================================= */
 
     .Login {
-      background-color: rgba(255, 255, 255, 0.84);
+
+      background: rgba(255, 255, 255, 0.88);
 
       padding: 30px;
 
@@ -64,38 +123,48 @@
       text-align: center;
 
       width: 100%;
-      max-width: 500px;
 
       box-shadow:
         0 10px 30px rgba(0, 0, 0, 0.25);
 
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(5px);
     }
 
+
     .Login h1 {
+
       margin-top: 0;
+
       margin-bottom: 20px;
 
       font-size: 34px;
+
       color: #111;
     }
 
+
     .Login h2 {
-      font-size: 20px;
+
+      font-size: 19px;
+
       margin-bottom: 25px;
-      color: #222;
+
+      color: #333;
     }
 
 
-    /* ================================
+    /* =================================
        FORM
-       ================================ */
+       ================================= */
 
     .form-group {
+
       margin-bottom: 12px;
     }
 
+
     .form-group label {
+
       display: inline-block;
 
       width: 100px;
@@ -107,13 +176,15 @@
       font-weight: 500;
     }
 
+
     input,
     select {
+
       width: 190px;
 
-      height: 32px;
+      height: 34px;
 
-      padding: 5px 8px;
+      padding: 5px 9px;
 
       border: 1px solid #aaa;
 
@@ -124,30 +195,34 @@
       background: white;
     }
 
+
     input:focus,
     select:focus {
+
       outline: none;
 
       border-color: #f5a623;
 
-      box-shadow: 0 0 4px rgba(245, 166, 35, 0.5);
+      box-shadow:
+        0 0 5px rgba(245, 166, 35, 0.45);
     }
 
 
-    /* ================================
+    /* =================================
        PREDICT BUTTON
-       ================================ */
+       ================================= */
 
     button {
-      height: 38px !important;
 
-      width: 200px !important;
+      height: 40px;
+
+      width: 200px;
 
       margin-top: 8px;
 
       border: none;
 
-      border-radius: 6px;
+      border-radius: 7px;
 
       background: #222;
 
@@ -155,44 +230,63 @@
 
       font-size: 16px;
 
+      font-weight: 600;
+
       cursor: pointer;
 
-      transition: 0.3s;
+      transition: all 0.3s ease;
     }
 
+
     button:hover {
+
       background: #f5a623;
 
       color: #111;
+
+      transform: translateY(-1px);
     }
 
 
-    /* ================================
+    /* =================================
        PREDICTION RESULT
-       ================================ */
+       ================================= */
 
     .prediction-result {
+
       margin-top: 20px;
 
-      padding: 12px;
+      padding: 15px;
 
-      border-radius: 8px;
+      border-radius: 9px;
 
-      background: rgba(255, 255, 255, 0.65);
+      background:
+        rgba(255, 255, 255, 0.70);
+
+      border: 1px solid
+        rgba(0, 0, 0, 0.08);
     }
 
+
     .prediction-result label {
+
+      display: block;
+
       width: auto;
 
       margin: 0;
 
+      text-align: center;
+
       font-weight: bold;
 
-      text-align: center;
+      font-size: 15px;
     }
 
+
     .prediction-result p {
-      margin: 8px 0 0;
+
+      margin: 9px 0 0;
 
       font-size: 17px;
 
@@ -202,21 +296,183 @@
     }
 
 
-    /* ================================
-       PROJECT FOOTER
-       ================================ */
+    /* =================================
+       MAP CARD
+       ================================= */
 
-    .project-footer {
-      width: 100%;
+    .map-card {
 
-      background: rgba(15, 18, 20, 0.97);
+      background:
+        rgba(255, 255, 255, 0.88);
 
-      color: white;
+      padding: 20px;
 
-      margin-top: 0;
+      border-radius: 15px;
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25);
+
+      backdrop-filter: blur(5px);
     }
 
+
+    .map-card h2 {
+
+      margin: 0 0 8px;
+
+      font-size: 22px;
+
+      color: #111;
+    }
+
+
+    .map-description {
+
+      margin: 0 0 15px;
+
+      color: #444;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+    }
+
+
+    /* =================================
+       MAP
+       ================================= */
+
+    #traffic-map {
+
+      width: 100%;
+
+      height: 520px;
+
+      border-radius: 10px;
+
+      overflow: hidden;
+
+      border: 1px solid #ccc;
+    }
+
+
+    /* =================================
+       LOCATION INFORMATION
+       ================================= */
+
+    .location-info {
+
+      margin-top: 12px;
+
+      padding: 12px;
+
+      border-radius: 8px;
+
+      background:
+        rgba(245, 166, 35, 0.13);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+
+      color: #333;
+    }
+
+
+    .location-info strong {
+
+      color: #111;
+    }
+
+
+    .coordinate {
+
+      font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+      font-weight: 600;
+    }
+
+
+    /* =================================
+       MAP LEGEND
+       ================================= */
+
+    .map-legend {
+
+      margin-top: 12px;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 20px;
+
+      flex-wrap: wrap;
+
+      font-size: 13px;
+    }
+
+
+    .legend-item {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 6px;
+    }
+
+
+    .legend-dot {
+
+      width: 11px;
+
+      height: 11px;
+
+      border-radius: 50%;
+
+      display: inline-block;
+    }
+
+
+    .low-dot {
+
+      background: #28a745;
+    }
+
+
+    .medium-dot {
+
+      background: #ffc107;
+    }
+
+
+    .high-dot {
+
+      background: #dc3545;
+    }
+
+
+    /* =================================
+       FOOTER
+       ================================= */
+
+    .project-footer {
+
+      width: 100%;
+
+      background:
+        rgba(15, 18, 20, 0.97);
+
+      color: white;
+    }
+
+
     .footer-container {
+
       max-width: 1200px;
 
       margin: 0 auto;
@@ -225,12 +481,15 @@
 
       display: grid;
 
-      grid-template-columns: 1fr 1.5fr 1fr;
+      grid-template-columns:
+        1fr 1.5fr 1fr;
 
       gap: 35px;
     }
 
+
     .footer-section {
+
       display: flex;
 
       gap: 15px;
@@ -238,17 +497,25 @@
       padding: 10px 20px;
     }
 
+
     .footer-section:not(:last-child) {
-      border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+      border-right:
+        1px solid
+        rgba(255, 255, 255, 0.15);
     }
 
+
     .footer-icon {
+
       font-size: 30px;
 
       min-width: 35px;
     }
 
+
     .footer-section h3 {
+
       margin: 0 0 10px;
 
       color: #f5a623;
@@ -256,7 +523,9 @@
       font-size: 17px;
     }
 
+
     .footer-section p {
+
       margin: 5px 0;
 
       color: #d5d5d5;
@@ -266,7 +535,9 @@
       line-height: 1.6;
     }
 
+
     .footer-section .developer-name {
+
       color: white;
 
       font-size: 16px;
@@ -274,7 +545,9 @@
       font-weight: bold;
     }
 
+
     .footer-section a {
+
       color: #4da6ff;
 
       text-decoration: none;
@@ -282,12 +555,18 @@
       font-weight: 500;
     }
 
+
     .footer-section a:hover {
+
       text-decoration: underline;
     }
 
+
     .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+      border-top:
+        1px solid
+        rgba(255, 255, 255, 0.15);
 
       text-align: center;
 
@@ -299,40 +578,69 @@
     }
 
 
-    /* ================================
-       MOBILE RESPONSIVE
-       ================================ */
+    /* =================================
+       RESPONSIVE DESIGN
+       ================================= */
+
+    @media (max-width: 950px) {
+
+      .app-layout {
+
+        grid-template-columns: 1fr;
+
+        max-width: 600px;
+      }
+
+
+      #traffic-map {
+
+        height: 400px;
+      }
+
+    }
+
 
     @media (max-width: 768px) {
 
       .page-content {
+
         padding: 25px 15px;
       }
 
-      .Login {
-        padding: 20px;
 
-        max-width: 450px;
+      .Login {
+
+        padding: 20px;
       }
 
+
       .Login h1 {
+
         font-size: 27px;
       }
 
+
       .Login h2 {
+
         font-size: 17px;
       }
 
+
       .form-group label {
+
         width: 90px;
       }
 
+
       input,
       select {
+
         width: 170px;
       }
 
+
       .footer-container {
+
         grid-template-columns: 1fr;
 
         padding: 25px 20px;
@@ -340,288 +648,598 @@
         gap: 10px;
       }
 
+
       .footer-section {
+
         padding: 20px 5px;
 
         border-right: none !important;
 
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom:
+          1px solid
+          rgba(255, 255, 255, 0.15);
       }
 
+
       .footer-section:last-child {
+
         border-bottom: none;
       }
 
     }
+    
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* ===== MAP ACTIONS ===== */
+
+.map-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.location-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    background: #222;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.location-btn:hover {
+    transform: translateY(-1px);
+    background: #333;
+}
+
+.traffic-popup {
+    min-width: 220px;
+    font-family: Arial, sans-serif;
+}
+
+.traffic-popup h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+}
+
+.traffic-volume {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.traffic-level {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.coordinates {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.prediction-card {
+    margin-top: 20px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.prediction-card h3 {
+    margin: 0 0 10px;
+}
+
+.prediction-number {
+    font-size: 22px;
+    font-weight: bold;
+}
+
 
   </style>
+
 </head>
 
 
 <body>
 
-  <!-- ================================
+
+  <!-- =================================
        MAIN APPLICATION
-       ================================ -->
+       ================================= -->
 
   <main class="page-content">
 
-    <div class="Login">
-
-      <h1>Traffic Volume Estimation</h1>
-
-      <form action="{{ url_for('predict')}}" method="post">
-
-        <h2>Please enter the following details</h2>
+    <div class="app-layout">
 
 
-        <!-- Holiday -->
+      <!-- =================================
+           PREDICTION FORM
+           ================================= -->
 
-        <div class="form-group">
+      <div class="Login">
 
-          <label for="holiday">Holiday:</label>
+        <h1>
+          Traffic Volume Estimation
+        </h1>
 
-          <select id="holiday" name="holiday">
 
-            <option value="7">None</option>
-            <option value="1">Columbus Day</option>
-            <option value="10">Veterans Day</option>
-            <option value="9">Thanksgiving Day</option>
-            <option value="0">Christmas Day</option>
-            <option value="6">New Years Day</option>
-            <option value="11">Washingtons Birthday</option>
-            <option value="5">Memorial Day</option>
-            <option value="2">Independence Day</option>
-            <option value="8">State Fair</option>
-            <option value="3">Labour Day</option>
-            <option value="4">Martin Luther King Jr Day</option>
+        <form
+          action="{{ url_for('predict') }}"
+          method="post"
+        >
 
-          </select>
+          <h2>
+            Please enter the following details
+          </h2>
+
+
+          <!-- Holiday -->
+
+          <div class="form-group">
+
+            <label for="holiday">
+              Holiday:
+            </label>
+
+            <select
+              id="holiday"
+              name="holiday"
+            >
+
+              <option value="7">
+                None
+              </option>
+
+              <option value="1">
+                Columbus Day
+              </option>
+
+              <option value="10">
+                Veterans Day
+              </option>
+
+              <option value="9">
+                Thanksgiving Day
+              </option>
+
+              <option value="0">
+                Christmas Day
+              </option>
+
+              <option value="6">
+                New Years Day
+              </option>
+
+              <option value="11">
+                Washingtons Birthday
+              </option>
+
+              <option value="5">
+                Memorial Day
+              </option>
+
+              <option value="2">
+                Independence Day
+              </option>
+
+              <option value="8">
+                State Fair
+              </option>
+
+              <option value="3">
+                Labour Day
+              </option>
+
+              <option value="4">
+                Martin Luther King Jr Day
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- Temperature -->
+
+          <div class="form-group">
+
+            <label for="temp">
+              Temp:
+            </label>
+
+            <input
+              type="number"
+              step="any"
+              name="temp"
+              id="temp"
+              placeholder="Temperature"
+              required
+            >
+
+          </div>
+
+
+          <!-- Rain -->
+
+          <div class="form-group">
+
+            <label for="rain">
+              Rain:
+            </label>
+
+            <input
+              type="number"
+              step="any"
+              name="rain"
+              id="rain"
+              placeholder="Rain"
+              required
+            >
+
+          </div>
+
+
+          <!-- Snow -->
+
+          <div class="form-group">
+
+            <label for="snow">
+              Snow:
+            </label>
+
+            <input
+              type="number"
+              step="any"
+              name="snow"
+              id="snow"
+              placeholder="Snow"
+              required
+            >
+
+          </div>
+
+
+          <!-- Weather -->
+
+          <div class="form-group">
+
+            <label for="weather">
+              Weather:
+            </label>
+
+            <select
+              id="weather"
+              name="weather"
+            >
+
+              <option value="1">
+                Clouds
+              </option>
+
+              <option value="0">
+                Clear
+              </option>
+
+              <option value="6">
+                Rain
+              </option>
+
+              <option value="2">
+                Drizzle
+              </option>
+
+              <option value="5">
+                Mist
+              </option>
+
+              <option value="4">
+                Haze
+              </option>
+
+              <option value="3">
+                Fog
+              </option>
+
+              <option value="1">
+                Thunderstorm
+              </option>
+
+              <option value="8">
+                Snow
+              </option>
+
+              <option value="9">
+                Squad11
+              </option>
+
+              <option value="7">
+                Smoke
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- Year -->
+
+          <div class="form-group">
+
+            <label for="year">
+              Year:
+            </label>
+
+            <input
+              type="number"
+              min="2012"
+              max="2027"
+              name="year"
+              id="year"
+              placeholder="Year"
+              required
+            >
+
+          </div>
+
+
+          <!-- Month -->
+
+          <div class="form-group">
+
+            <label for="month">
+              Month:
+            </label>
+
+            <input
+              type="number"
+              min="1"
+              max="12"
+              name="month"
+              id="month"
+              placeholder="Month"
+              required
+            >
+
+          </div>
+
+
+          <!-- Day -->
+
+          <div class="form-group">
+
+            <label for="day">
+              Day:
+            </label>
+
+            <input
+              type="number"
+              min="1"
+              max="31"
+              name="day"
+              id="day"
+              placeholder="Day"
+              required
+            >
+
+          </div>
+
+
+          <!-- Hours -->
+
+          <div class="form-group">
+
+            <label for="hours">
+              Hours:
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              max="23"
+              name="hours"
+              id="hours"
+              placeholder="Hours"
+              required
+            >
+
+          </div>
+
+
+          <!-- Minutes -->
+
+          <div class="form-group">
+
+            <label for="minutes">
+              Minutes:
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              max="59"
+              name="minutes"
+              id="minutes"
+              placeholder="Minutes"
+              required
+            >
+
+          </div>
+
+
+          <!-- Seconds -->
+
+          <div class="form-group">
+
+            <label for="seconds">
+              Seconds:
+            </label>
+
+            <input
+              type="number"
+              min="0"
+              max="59"
+              name="seconds"
+              id="seconds"
+              placeholder="Seconds"
+              required
+            >
+
+          </div>
+
+
+          <!-- Predict Button -->
+
+          <div class="form-group">
+
+            <button type="submit">
+              Predict
+            </button>
+
+          </div>
+
+        </form>
+
+
+        <!-- Prediction Result -->
+
+        <div class="prediction-result">
+
+          <label for="prediction">
+            Predicted Traffic Volume
+          </label>
+
+          <p>
+            {{ prediction_text }}
+          </p>
 
         </div>
 
-
-        <!-- Temperature -->
-
-        <div class="form-group">
-
-          <label for="temp">Temp:</label>
-
-          <input
-            type="number"
-            step="any"
-            name="temp"
-            placeholder="Temperature"
-            required
-          />
-
-        </div>
-
-
-        <!-- Rain -->
-
-        <div class="form-group">
-
-          <label for="rain">Rain:</label>
-
-          <input
-            type="number"
-            step="any"
-            name="rain"
-            placeholder="Rain"
-            required
-          />
-
-        </div>
-
-
-        <!-- Snow -->
-
-        <div class="form-group">
-
-          <label for="snow">Snow:</label>
-
-          <input
-            type="number"
-            step="any"
-            name="snow"
-            placeholder="Snow"
-            required
-          />
-
-        </div>
-
-
-        <!-- Weather -->
-
-        <div class="form-group">
-
-          <label for="weather">Weather:</label>
-
-          <select id="weather" name="weather">
-
-            <option value="1">Clouds</option>
-            <option value="0">Clear</option>
-            <option value="6">Rain</option>
-            <option value="2">Drizzle</option>
-            <option value="5">Mist</option>
-            <option value="4">Haze</option>
-            <option value="3">Fog</option>
-            <option value="1">Thunderstorm</option>
-            <option value="8">Snow</option>
-            <option value="9">Squad11</option>
-            <option value="7">Smoke</option>
-
-          </select>
-
-        </div>
-
-
-        <!-- Year -->
-
-        <div class="form-group">
-
-          <label for="year">Year:</label>
-
-          <input
-            type="number"
-            min="2012"
-            max="2027"
-            name="year"
-            placeholder="Year"
-            required
-          />
-
-        </div>
-
-
-        <!-- Month -->
-
-        <div class="form-group">
-
-          <label for="month">Month:</label>
-
-          <input
-            type="number"
-            min="1"
-            max="12"
-            name="month"
-            placeholder="Month"
-            required
-          />
-
-        </div>
-
-
-        <!-- Day -->
-
-        <div class="form-group">
-
-          <label for="day">Day:</label>
-
-          <input
-            type="number"
-            min="1"
-            max="31"
-            name="day"
-            placeholder="Day"
-            required
-          />
-
-        </div>
-
-
-        <!-- Hours -->
-
-        <div class="form-group">
-
-          <label for="hours">Hours:</label>
-
-          <input
-            type="number"
-            min="0"
-            max="23"
-            name="hours"
-            placeholder="Hours"
-            required
-          />
-
-        </div>
-
-
-        <!-- Minutes -->
-
-        <div class="form-group">
-
-          <label for="minutes">Minutes:</label>
-
-          <input
-            type="number"
-            min="0"
-            max="59"
-            name="minutes"
-            placeholder="Minutes"
-            required
-          />
-
-        </div>
-
-
-        <!-- Seconds -->
-
-        <div class="form-group">
-
-          <label for="seconds">Seconds:</label>
-
-          <input
-            type="number"
-            min="0"
-            max="59"
-            name="seconds"
-            placeholder="Seconds"
-            required
-          />
-
-        </div>
-
-
-        <!-- Predict Button -->
-
-        <div class="form-group">
-
-          <button type="submit">
-            Predict
-          </button>
-
-        </div>
-
-      </form>
-
-
-      <!-- Prediction Result -->
-
-      <div class="prediction-result">
-
-        <label for="prediction">
-          Predicted Traffic Volume:
-        </label>
-
-        <p>
-          {{ prediction_text }}
-        </p>
 
       </div>
+
+
+      <!-- =================================
+           INTERACTIVE MAP
+           ================================= -->
+
+      <div class="map-card">
+
+        <h2>
+          🗺️ Traffic Location Map
+        </h2>
+
+        <p class="map-description">
+
+          Click anywhere on the map to select
+          a location for traffic visualization.
+
+        </p>
+
+
+        <div id="traffic-map"></div>
+
+        <div class="map-actions">
+    <button type="button" onclick="useMyLocation()" class="location-btn">
+        📍 Use My Location
+    </button>
+
+    <button type="button" onclick="selectBengaluru()" class="location-btn">
+        🏙️ Bengaluru
+    </button>
+</div>
+
+        <!-- Selected Location -->
+
+        <div class="location-info">
+
+          <strong>
+            📍 Selected Location
+          </strong>
+
+          <br>
+
+          Latitude:
+
+          <span
+            id="latitude"
+            class="coordinate"
+          >
+            Not selected
+          </span>
+
+          <br>
+
+          Longitude:
+
+          <span
+            id="longitude"
+            class="coordinate"
+          >
+            Not selected
+          </span>
+
+        </div>
+
+
+        <!-- Map Legend -->
+
+        <div class="map-legend">
+
+          <div class="legend-item">
+
+            <span class="legend-dot low-dot"></span>
+
+            Low Traffic
+
+          </div>
+
+
+          <div class="legend-item">
+
+            <span class="legend-dot medium-dot"></span>
+
+            Medium Traffic
+
+          </div>
+
+
+          <div class="legend-item">
+
+            <span class="legend-dot high-dot"></span>
+
+            High Traffic
+
+          </div>
+
+        </div>
+
+
+      </div>
+
 
     </div>
 
   </main>
 
 
-  <!-- ================================
+  <!-- =================================
        PROJECT FOOTER
-       ================================ -->
+       ================================= -->
 
   <footer class="project-footer">
+
 
     <div class="footer-container">
 
@@ -634,15 +1252,21 @@
           👨‍💻
         </div>
 
+
         <div>
 
-          <h3>Project By</h3>
+          <h3>
+            Project By
+          </h3>
+
 
           <p class="developer-name">
-             Dileep Kumar
+            Dileep Kumar
           </p>
 
+
           <p>
+
             <a
               href="https://github.com/Dileep3015"
               target="_blank"
@@ -650,19 +1274,25 @@
             >
               GitHub: Dileep3015
             </a>
+
           </p>
-           <p>
+
+
+          <p>
+
             <a
               href="https://www.linkedin.com/in/dileepkumar28072002"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Linkedin: Dileep Kumar Donakonda
+              LinkedIn: Dileep Kumar Donakonda
             </a>
+
           </p>
 
+
           <p>
-              Machine Learning & Data Science Project
+            Machine Learning & Data Science Project
           </p>
 
         </div>
@@ -678,14 +1308,20 @@
           🚦
         </div>
 
+
         <div>
 
-          <h3>About This Project</h3>
+          <h3>
+            About This Project
+          </h3>
+
 
           <p>
-            This project predicts traffic volume using
-            machine learning based on weather conditions
-            and time-related information.
+
+            This project predicts traffic volume
+            using machine learning based on weather
+            conditions and time-related information.
+
           </p>
 
         </div>
@@ -701,9 +1337,13 @@
           🌐
         </div>
 
+
         <div>
 
-          <h3>Live Application</h3>
+          <h3>
+            Live Application
+          </h3>
+
 
           <p>
 
@@ -729,12 +1369,528 @@
 
     <div class="footer-bottom">
 
-      © 2026 Dileep Kumar. All rights reserved.
+      © 2026 Dileep Kumar.
+      All rights reserved.
 
     </div>
+
 
   </footer>
 
 
+  <!-- =================================
+       MAP JAVASCRIPT
+       ================================= -->
+
+  <script>
+
+  /*
+   * ==========================================
+   * INTERACTIVE TRAFFIC MAP
+   * ==========================================
+   *
+   * The map is currently used to visualize
+   * the Random Forest prediction at a
+   * user-selected geographic location.
+   *
+   * Latitude and longitude are NOT passed
+   * into the existing ML model because the
+   * trained model does not use them as features.
+   */
+
+
+  // ==========================================
+  // CREATE MAP
+  // ==========================================
+
+  const map = L.map("traffic-map").setView(
+    [12.9716, 77.5946],
+    11
+  );
+
+
+  // ==========================================
+  // OPENSTREETMAP
+  // ==========================================
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    }
+  ).addTo(map);
+
+
+  // ==========================================
+  // SELECTED LOCATION
+  // ==========================================
+
+  let selectedMarker = null;
+
+
+  // ==========================================
+  // SHOW COORDINATES
+  // ==========================================
+
+  function showLocation(latitude, longitude) {
+
+    document.getElementById(
+      "latitude"
+    ).textContent = latitude.toFixed(6);
+
+
+    document.getElementById(
+      "longitude"
+    ).textContent = longitude.toFixed(6);
+
+  }
+
+
+  // ==========================================
+  // GET CURRENT PREDICTION
+  // ==========================================
+
+  function getPredictionText() {
+
+    const predictionElement =
+      document.querySelector(
+        ".prediction-result p"
+      );
+
+
+    if (!predictionElement) {
+
+      return "";
+
+    }
+
+
+    return predictionElement.textContent.trim();
+
+  }
+
+
+  // ==========================================
+  // DETERMINE TRAFFIC LEVEL
+  // ==========================================
+
+  function getTrafficLevel(predictionText) {
+
+    const text =
+      predictionText.toLowerCase();
+
+
+    if (text.includes("high traffic")) {
+
+      return "high";
+
+    }
+
+
+    if (text.includes("medium traffic")) {
+
+      return "medium";
+
+    }
+
+
+    if (text.includes("low traffic")) {
+
+      return "low";
+
+    }
+
+
+    return null;
+
+  }
+
+
+  // ==========================================
+  // TRAFFIC COLORS
+  // ==========================================
+
+  function getTrafficColor(level) {
+
+    if (level === "low") {
+
+      return "#28a745";
+
+    }
+
+
+    if (level === "medium") {
+
+      return "#ffc107";
+
+    }
+
+
+    if (level === "high") {
+
+      return "#dc3545";
+
+    }
+
+
+    return "#3388ff";
+
+  }
+
+
+  // ==========================================
+  // CREATE TRAFFIC VISUALIZATION
+  // ==========================================
+
+  function updateTrafficVisualization(
+    latitude,
+    longitude
+  ) {
+
+    const predictionText =
+      getPredictionText();
+
+
+    const trafficLevel =
+      getTrafficLevel(
+        predictionText
+      );
+
+
+    /*
+     * Remove previous marker
+     */
+
+    if (selectedMarker) {
+
+      map.removeLayer(
+        selectedMarker
+      );
+
+    }
+
+
+    /*
+     * If there is no prediction yet,
+     * use the normal blue marker.
+     */
+
+    if (!trafficLevel) {
+
+      selectedMarker =
+        L.marker([
+          latitude,
+          longitude
+        ]).addTo(map);
+
+
+      selectedMarker
+        .bindPopup(
+          "<b>Selected Traffic Location</b><br>" +
+          "Latitude: " +
+          latitude.toFixed(6) +
+          "<br>" +
+          "Longitude: " +
+          longitude.toFixed(6)
+        )
+        .openPopup();
+
+
+      return;
+
+    }
+
+
+    /*
+     * Determine color
+     */
+
+    const trafficColor =
+      getTrafficColor(
+        trafficLevel
+      );
+
+
+    /*
+     * Create colored circle
+     */
+
+    selectedMarker =
+      L.circleMarker(
+        [
+          latitude,
+          longitude
+        ],
+        {
+          radius: 14,
+
+          fillColor:
+            trafficColor,
+
+          color: "#ffffff",
+
+          weight: 3,
+
+          opacity: 1,
+
+          fillOpacity: 0.85
+        }
+      ).addTo(map);
+
+
+    /*
+     * Create popup
+     */
+
+    const formattedPrediction =
+      predictionText
+        .replace(
+          "Estimated Traffic Volume is:",
+          "Traffic Volume:"
+        );
+
+
+    selectedMarker
+      .bindPopup(
+        "<div style='min-width:210px'>" +
+
+        "<strong style='font-size:16px'>" +
+        "🚦 Traffic Prediction" +
+        "</strong>" +
+
+        "<hr style='margin:8px 0'>" +
+
+        "<strong>" +
+        formattedPrediction +
+        "</strong>" +
+
+        "<br><br>" +
+
+        "<span>" +
+        "📍 Latitude: " +
+        latitude.toFixed(6) +
+        "</span>" +
+
+        "<br>" +
+
+        "<span>" +
+        "📍 Longitude: " +
+        longitude.toFixed(6) +
+        "</span>" +
+
+        "</div>"
+      )
+      .openPopup();
+
+
+    /*
+     * Zoom to selected location
+     */
+
+    map.setView(
+      [
+        latitude,
+        longitude
+      ],
+      Math.max(
+        map.getZoom(),
+        13
+      )
+    );
+
+  }
+
+
+  // ==========================================
+  // RESTORE SAVED LOCATION
+  // ==========================================
+
+  const savedLatitude =
+    localStorage.getItem(
+      "trafficLatitude"
+    );
+
+
+  const savedLongitude =
+    localStorage.getItem(
+      "trafficLongitude"
+    );
+
+
+  if (
+    savedLatitude &&
+    savedLongitude
+  ) {
+
+    const latitude =
+      parseFloat(
+        savedLatitude
+      );
+
+
+    const longitude =
+      parseFloat(
+        savedLongitude
+      );
+
+
+    showLocation(
+      latitude,
+      longitude
+    );
+
+
+    /*
+     * Wait until the page is fully loaded,
+     * then visualize the prediction.
+     */
+
+    updateTrafficVisualization(
+      latitude,
+      longitude
+    );
+
+  }
+
+
+  // ==========================================
+  // MAP CLICK
+  // ==========================================
+
+  map.on(
+    "click",
+    function(event) {
+
+      const latitude =
+        event.latlng.lat;
+
+
+      const longitude =
+        event.latlng.lng;
+
+
+      /*
+       * Save location
+       */
+
+      localStorage.setItem(
+        "trafficLatitude",
+        latitude
+      );
+
+
+      localStorage.setItem(
+        "trafficLongitude",
+        longitude
+      );
+
+
+      /*
+       * Display coordinates
+       */
+
+      showLocation(
+        latitude,
+        longitude
+      );
+
+
+      /*
+       * Show the selected location
+       * and current prediction if available.
+       */
+
+      updateTrafficVisualization(
+        latitude,
+        longitude
+      );
+
+    }
+  );
+
+
+</script>
+<script>
+    /*
+     * Traffic Volume Prediction & Map Visualization
+     */
+    /*
+     * Select a location on the map
+     */
+    function selectTrafficLocation(lat, lng) {
+
+        if (selectedMarker) {
+            map.removeLayer(selectedMarker);
+        }
+
+        selectedMarker = L.marker([lat, lng]).addTo(map);
+
+        selectedMarker.bindPopup(`
+            <div class="traffic-popup">
+                <h3>📍 Selected Traffic Location</h3>
+
+                <div class="coordinates">
+                    <strong>Latitude:</strong> ${lat.toFixed(6)}<br>
+                    <strong>Longitude:</strong> ${lng.toFixed(6)}
+                </div>
+            </div>
+        `).openPopup();
+
+        map.setView([lat, lng], 14);
+
+        document.getElementById("selected-latitude").textContent =
+            lat.toFixed(6);
+
+        document.getElementById("selected-longitude").textContent =
+            lng.toFixed(6);
+    }
+
+
+    /*
+     * Use browser location
+     */
+    function useMyLocation() {
+
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                selectTrafficLocation(lat, lng);
+            },
+
+            function(error) {
+
+                alert(
+                    "Unable to access your location. " +
+                    "Please allow location access in your browser."
+                );
+            }
+        );
+    }
+
+
+    /*
+     * Bengaluru default location
+     */
+    function selectBengaluru() {
+
+        const lat = 12.9716;
+        const lng = 77.5946;
+
+        selectTrafficLocation(lat, lng);
+    }
+</script>
+
 </body>
+
 </html>

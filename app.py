@@ -56,14 +56,20 @@ def predict():
 
         prediction = model.predict(features_values)
 
-        text = f"Estimated Traffic Volume is: {prediction[0]}"
+        traffic_volume = round(float(prediction[0]))
 
-        if prediction[0] < 500:
-            text += " (Low Traffic)"
-        elif prediction[0] < 2000:
-            text += " (Medium Traffic)"
+        if traffic_volume < 500:
+            traffic_level = "Low Traffic"
+        elif traffic_volume < 2000:
+            traffic_level = "Medium Traffic"
         else:
-            text += " (High Traffic)"
+            traffic_level = "High Traffic"
+
+        text = (
+                f"Estimated Traffic Volume: "
+                f"{traffic_volume:,} vehicles "
+                f"({traffic_level})"
+                )
 
         return render_template(
             "index.html",
